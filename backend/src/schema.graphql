@@ -17,6 +17,24 @@ type Person {
   code: String
 }
 
+type CargoDimensionCategory {
+  id: Int!
+  name: String!
+  width: Int!
+  depth: Int!
+  height: Int!
+  unitsOfSpace: Float!
+}
+
+type Cargo {
+  id: Int!
+  description: String!
+  cargoDimensionCategoryId: Int!
+  cargoDimensionCategory: CargoDimensionCategory!
+  cargoDimensions: String!
+  cargoWeight: Float!
+}
+
 type Query {
   helloWorld: String!
   tickets: [String!]!
@@ -24,6 +42,9 @@ type Query {
   location(id: Int!): Location!
   persons: [Person!]!
   person(id: Int!): Person!
+  cargos: [Cargo!]!
+  cargo(id: Int!): Cargo!
+  cargoDimensionCategory(id: Int!): CargoDimensionCategory!
 }
 
 type Mutation {
@@ -32,6 +53,12 @@ type Mutation {
   removeLocation(id: Int!): Location!
   createPerson(createPersonInput: CreatePersonInput!): Person!
   updatePerson(updatePersonInput: UpdatePersonInput!): Person!
+  createCargo(createCargoInput: CreateCargoInput!): Cargo!
+  updateCargo(updateCargoInput: UpdateCargoInput!): Cargo!
+  removeCargo(id: Int!): Cargo!
+  createCargoDimensionCategory(createCargoDimensionCategoryInput: CreateCargoDimensionCategoryInput!): CargoDimensionCategory!
+  updateCargoDimensionCategory(updateCargoDimensionCategoryInput: UpdateCargoDimensionCategoryInput!): CargoDimensionCategory!
+  removeCargoDimensionCategory(id: Int!): CargoDimensionCategory!
 }
 
 input CreateLocationInput {
@@ -51,5 +78,37 @@ input CreatePersonInput {
 input UpdatePersonInput {
   name: String!
   code: String
+  id: Int!
+}
+
+input CreateCargoInput {
+  description: String!
+  cargoDimensionCategoryId: Int!
+  cargoDimensions: String!
+  cargoWeight: Float!
+}
+
+input UpdateCargoInput {
+  description: String!
+  cargoDimensionCategoryId: Int!
+  cargoDimensions: String!
+  cargoWeight: Float!
+  id: Int!
+}
+
+input CreateCargoDimensionCategoryInput {
+  name: String!
+  width: Int!
+  depth: Int!
+  height: Int!
+  unitsOfSpace: Float!
+}
+
+input UpdateCargoDimensionCategoryInput {
+  name: String!
+  width: Int!
+  depth: Int!
+  height: Int!
+  unitsOfSpace: Float!
   id: Int!
 }

@@ -5,6 +5,8 @@ import { AppResolver } from './app.resolver';
 import { AppService } from './app.service';
 import { LocationModule } from './location/location.module';
 import { PersonModule } from './person/person.module';
+import { CargoModule } from './cargo/cargo.module';
+import { CargoDimensionCategoryModule } from './cargo-dimension-category/cargo-dimension-category.module';
 
 
 @Module({
@@ -15,6 +17,8 @@ import { PersonModule } from './person/person.module';
     }),
     LocationModule,
     PersonModule,
+    CargoModule,
+    CargoDimensionCategoryModule,
   ],
   controllers: [],
   providers: [AppService, AppResolver],

@@ -12,6 +12,7 @@ CREATE TABLE "Cargo" (
 -- CreateTable
 CREATE TABLE "CargoDimensionCategory" (
     "id" SERIAL NOT NULL,
+    "name" TEXT NOT NULL,
     "width" INTEGER NOT NULL,
     "depth" INTEGER NOT NULL,
     "height" INTEGER NOT NULL,
@@ -93,24 +94,6 @@ CREATE TABLE "TripRequest" (
 );
 
 -- CreateTable
-CREATE TABLE "TripRequestCargo" (
-    "tripRequestId" INTEGER NOT NULL,
-    "cargoId" INTEGER NOT NULL,
-    "id" SERIAL NOT NULL,
-
-    CONSTRAINT "TripRequestCargo_pkey" PRIMARY KEY ("id")
-);
-
--- CreateTable
-CREATE TABLE "TripRequestPerson" (
-    "tripRequestId" INTEGER NOT NULL,
-    "personId" INTEGER NOT NULL,
-    "id" SERIAL NOT NULL,
-
-    CONSTRAINT "TripRequestPerson_pkey" PRIMARY KEY ("id")
-);
-
--- CreateTable
 CREATE TABLE "TripTicket" (
     "id" SERIAL NOT NULL,
     "personId" INTEGER,
@@ -126,8 +109,35 @@ CREATE TABLE "TripTicket" (
     CONSTRAINT "TripTicket_pkey" PRIMARY KEY ("id")
 );
 
+-- CreateTable
+CREATE TABLE "_CargoToTripRequest" (
+    "A" INTEGER NOT NULL,
+    "B" INTEGER NOT NULL
+);
+
+-- CreateTable
+CREATE TABLE "_PersonToTripRequest" (
+    "A" INTEGER NOT NULL,
+    "B" INTEGER NOT NULL
+);
+
 -- CreateIndex
 CREATE INDEX "fki_FK_Trip_TripRequestId_TripRequest_Id" ON "Trip"("tripRequestId");
+
+-- CreateIndex
+CREATE UNIQUE INDEX "_CargoToTripRequest_AB_unique" ON "_CargoToTripRequest"("A", "B");
+
+-- CreateIndex
+CREATE INDEX "_CargoToTripRequest_B_index" ON "_CargoToTripRequest"("B");
+
+-- CreateIndex
+CREATE UNIQUE INDEX "_PersonToTripRequest_AB_unique" ON "_PersonToTripRequest"("A", "B");
+
+-- CreateIndex
+CREATE INDEX "_PersonToTripRequest_B_index" ON "_PersonToTripRequest"("B");
+
+-- AddForeignKey
+ALTER TABLE "Cargo" ADD CONSTRAINT "Cargo_cargoDimensionCategoryId_fkey" FOREIGN KEY ("cargoDimensionCategoryId") REFERENCES "CargoDimensionCategory"("id") ON DELETE NO ACTION ON UPDATE NO ACTION;
 
 -- AddForeignKey
 ALTER TABLE "Trip" ADD CONSTRAINT "Trip_createdBy_fkey" FOREIGN KEY ("createdBy") REFERENCES "Person"("id") ON DELETE NO ACTION ON UPDATE NO ACTION;
@@ -157,18 +167,6 @@ ALTER TABLE "TripRequest" ADD CONSTRAINT "TripRequest_statusId_fkey" FOREIGN KEY
 ALTER TABLE "TripRequest" ADD CONSTRAINT "TripRequest_toLocationId_fkey" FOREIGN KEY ("toLocationId") REFERENCES "Location"("id") ON DELETE NO ACTION ON UPDATE NO ACTION;
 
 -- AddForeignKey
-ALTER TABLE "TripRequestCargo" ADD CONSTRAINT "TripRequestCargo_cargoId_fkey" FOREIGN KEY ("cargoId") REFERENCES "Cargo"("id") ON DELETE NO ACTION ON UPDATE NO ACTION;
-
--- AddForeignKey
-ALTER TABLE "TripRequestCargo" ADD CONSTRAINT "TripRequestCargo_tripRequestId_fkey" FOREIGN KEY ("tripRequestId") REFERENCES "TripRequest"("id") ON DELETE NO ACTION ON UPDATE NO ACTION;
-
--- AddForeignKey
-ALTER TABLE "TripRequestPerson" ADD CONSTRAINT "TripRequestPerson_personId_fkey" FOREIGN KEY ("personId") REFERENCES "Person"("id") ON DELETE NO ACTION ON UPDATE NO ACTION;
-
--- AddForeignKey
-ALTER TABLE "TripRequestPerson" ADD CONSTRAINT "TripRequestPerson_tripRequestId_fkey" FOREIGN KEY ("tripRequestId") REFERENCES "TripRequest"("id") ON DELETE NO ACTION ON UPDATE NO ACTION;
-
--- AddForeignKey
 ALTER TABLE "TripTicket" ADD CONSTRAINT "TripTicket_cargoId_fkey" FOREIGN KEY ("cargoId") REFERENCES "Cargo"("id") ON DELETE NO ACTION ON UPDATE NO ACTION;
 
 -- AddForeignKey
@@ -182,3 +180,15 @@ ALTER TABLE "TripTicket" ADD CONSTRAINT "TripTicket_personId_fkey" FOREIGN KEY (
 
 -- AddForeignKey
 ALTER TABLE "TripTicket" ADD CONSTRAINT "TripTicket_statusId_fkey" FOREIGN KEY ("statusId") REFERENCES "Status"("id") ON DELETE NO ACTION ON UPDATE NO ACTION;
+
+-- AddForeignKey
+ALTER TABLE "_CargoToTripRequest" ADD CONSTRAINT "_CargoToTripRequest_A_fkey" FOREIGN KEY ("A") REFERENCES "Cargo"("id") ON DELETE CASCADE ON UPDATE CASCADE;
+
+-- AddForeignKey
+ALTER TABLE "_CargoToTripRequest" ADD CONSTRAINT "_CargoToTripRequest_B_fkey" FOREIGN KEY ("B") REFERENCES "TripRequest"("id") ON DELETE CASCADE ON UPDATE CASCADE;
+
+-- AddForeignKey
+ALTER TABLE "_PersonToTripRequest" ADD CONSTRAINT "_PersonToTripRequest_A_fkey" FOREIGN KEY ("A") REFERENCES "Person"("id") ON DELETE CASCADE ON UPDATE CASCADE;
+
+-- AddForeignKey
+ALTER TABLE "_PersonToTripRequest" ADD CONSTRAINT "_PersonToTripRequest_B_fkey" FOREIGN KEY ("B") REFERENCES "TripRequest"("id") ON DELETE CASCADE ON UPDATE CASCADE;

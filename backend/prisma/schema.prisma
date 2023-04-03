@@ -8,21 +8,24 @@ datasource db {
 }
 
 model Cargo {
-  id                       Int                @id @default(autoincrement())
+  id                       Int                    @id @default(autoincrement())
   description              String?
   cargoDimensionCategoryId Int
   cargoDimensions          String?
   cargoWeight              Float?
-  tripRequestCargo         TripRequestCargo[]
+  cargoDimensionCategory   CargoDimensionCategory @relation(fields: [cargoDimensionCategoryId], references: [id], onDelete: NoAction, onUpdate: NoAction)
+  tripRequest              TripRequest[]
   tripTicket               TripTicket[]
 }
 
 model CargoDimensionCategory {
-  id           Int   @id @default(autoincrement())
+  id           Int     @id @default(autoincrement())
+  name         String
   width        Int
   depth        Int
   height       Int
   unitsOfSpace Float
+  Cargo        Cargo[]
 }
 
 model Location {
@@ -39,15 +42,15 @@ model Location {
 }
 
 model Person {
-  id                                       Int                 @id @default(autoincrement())
+  id                                       Int           @id @default(autoincrement())
   name                                     String
   code                                     String?
-  trip_Trip_CreatedByToPerson              Trip[]              @relation("Trip_CreatedByToPerson")
-  trip_Trip_ModifiedByToPerson             Trip[]              @relation("Trip_ModifiedByToPerson")
-  tripRequestPerson                        TripRequestPerson[]
-  tripTicket_TripTicket_CreatedByToPerson  TripTicket[]        @relation("TripTicket_CreatedByToPerson")
-  tripTicket_TripTicket_ModifiedByToPerson TripTicket[]        @relation("TripTicket_ModifiedByToPerson")
-  tripTicket_TripTicket_PersonIdToPerson   TripTicket[]        @relation("TripTicket_PersonIdToPerson")
+  trip_Trip_CreatedByToPerson              Trip[]        @relation("Trip_CreatedByToPerson")
+  trip_Trip_ModifiedByToPerson             Trip[]        @relation("Trip_ModifiedByToPerson")
+  tripRequest                              TripRequest[]
+  tripTicket_TripTicket_CreatedByToPerson  TripTicket[]  @relation("TripTicket_CreatedByToPerson")
+  tripTicket_TripTicket_ModifiedByToPerson TripTicket[]  @relation("TripTicket_ModifiedByToPerson")
+  tripTicket_TripTicket_PersonIdToPerson   TripTicket[]  @relation("TripTicket_PersonIdToPerson")
 }
 
 model Status {
@@ -88,41 +91,25 @@ model Trip {
 }
 
 model TripRequest {
-  id                                            Int                 @id @default(autoincrement())
+  id                                            Int       @id @default(autoincrement())
   fromLocationId                                Int
   toLocationId                                  Int
-  departEarliest                                DateTime?           @db.Timestamp(6)
-  departLatest                                  DateTime?           @db.Timestamp(6)
-  arriveEarliest                                DateTime?           @db.Timestamp(6)
-  arriveLatest                                  DateTime?           @db.Timestamp(6)
+  departEarliest                                DateTime? @db.Timestamp(6)
+  departLatest                                  DateTime? @db.Timestamp(6)
+  arriveEarliest                                DateTime? @db.Timestamp(6)
+  arriveLatest                                  DateTime? @db.Timestamp(6)
   createdBy                                     Int?
-  createdAt                                     DateTime?           @db.Timestamp(6)
+  createdAt                                     DateTime? @db.Timestamp(6)
   modifiedBy                                    Int?
-  modifiedAt                                    DateTime?           @db.Timestamp(6)
+  modifiedAt                                    DateTime? @db.Timestamp(6)
   statusId                                      Int?
   remarks                                       String?
   trip                                          Trip[]
-  location_TripRequest_FromLocationIdToLocation Location            @relation("TripRequest_FromLocationIdToLocation", fields: [fromLocationId], references: [id], onDelete: NoAction, onUpdate: NoAction)
-  status                                        Status?             @relation(fields: [statusId], references: [id], onDelete: NoAction, onUpdate: NoAction)
-  location_TripRequest_ToLocationIdToLocation   Location            @relation("TripRequest_ToLocationIdToLocation", fields: [toLocationId], references: [id], onDelete: NoAction, onUpdate: NoAction)
-  tripRequestCargo                              TripRequestCargo[]
-  tripRequestPerson                             TripRequestPerson[]
-}
-
-model TripRequestCargo {
-  tripRequestId Int
-  cargoId       Int
-  id            Int         @id @default(autoincrement())
-  cargo         Cargo       @relation(fields: [cargoId], references: [id], onDelete: NoAction, onUpdate: NoAction)
-  tripRequest   TripRequest @relation(fields: [tripRequestId], references: [id], onDelete: NoAction, onUpdate: NoAction)
-}
-
-model TripRequestPerson {
-  tripRequestId Int
-  personId      Int
-  id            Int         @id @default(autoincrement())
-  person        Person      @relation(fields: [personId], references: [id], onDelete: NoAction, onUpdate: NoAction)
-  tripRequest   TripRequest @relation(fields: [tripRequestId], references: [id], onDelete: NoAction, onUpdate: NoAction)
+  location_TripRequest_FromLocationIdToLocation Location  @relation("TripRequest_FromLocationIdToLocation", fields: [fromLocationId], references: [id], onDelete: NoAction, onUpdate: NoAction)
+  status                                        Status?   @relation(fields: [statusId], references: [id], onDelete: NoAction, onUpdate: NoAction)
+  location_TripRequest_ToLocationIdToLocation   Location  @relation("TripRequest_ToLocationIdToLocation", fields: [toLocationId], references: [id], onDelete: NoAction, onUpdate: NoAction)
+  cargo                                         Cargo[]
+  person                                        Person[]
 }
 
 model TripTicket {
