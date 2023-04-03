@@ -4,6 +4,7 @@ import { GraphQLModule } from '@nestjs/graphql';
 import { AppResolver } from './app.resolver';
 import { AppService } from './app.service';
 import { LocationModule } from './location/location.module';
+import { PersonModule } from './person/person.module';
 
 
 @Module({
@@ -13,6 +14,7 @@ import { LocationModule } from './location/location.module';
       autoSchemaFile: './src/schema.graphql',
     }),
     LocationModule,
+    PersonModule,
   ],
   controllers: [],
   providers: [AppService, AppResolver],
