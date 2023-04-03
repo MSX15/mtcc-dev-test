@@ -2,6 +2,33 @@
 # THIS FILE WAS AUTOMATICALLY GENERATED (DO NOT MODIFY)
 # ------------------------------------------------------
 
+type Location {
+  id: Int!
+  name: String!
+  isDeleted: Boolean!
+  coordinateX: Float
+  coordinateY: Float
+  addressDetails: String
+}
+
 type Query {
   helloWorld: String!
+  tickets: [String!]!
+  locations: [Location!]!
+  location(id: Int!): Location!
+}
+
+type Mutation {
+  createLocation(createLocationInput: CreateLocationInput!): Location!
+  updateLocation(updateLocationInput: UpdateLocationInput!): Location!
+  removeLocation(id: Int!): Location!
+}
+
+input CreateLocationInput {
+  name: String!
+}
+
+input UpdateLocationInput {
+  name: String!
+  id: Int!
 }

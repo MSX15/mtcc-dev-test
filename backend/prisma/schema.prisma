@@ -1,6 +1,3 @@
-// This is your Prisma schema file,
-// learn more about it in the docs: https://pris.ly/d/prisma-schema
-
 generator client {
   provider = "prisma-client-js"
 }
@@ -8,4 +5,140 @@ generator client {
 datasource db {
   provider = "postgresql"
   url      = env("DATABASE_URL")
+}
+
+model Cargo {
+  id                       Int                @id @default(autoincrement())
+  description              String?
+  cargoDimensionCategoryId Int
+  cargoDimensions          String?
+  cargoWeight              Float?
+  tripRequestCargo         TripRequestCargo[]
+  tripTicket               TripTicket[]
+}
+
+model CargoDimensionCategory {
+  id           Int   @id @default(autoincrement())
+  width        Int
+  depth        Int
+  height       Int
+  unitsOfSpace Float
+}
+
+model Location {
+  id                                               Int           @id @default(autoincrement())
+  name                                             String
+  coordinateX                                      Decimal?      @db.Decimal
+  coordinateY                                      Decimal?      @db.Decimal
+  addressDetails                                   Json?         @db.Json
+  isDeleted                                        Boolean       @default(false)
+  trip_Trip_FromLocationIdToLocation               Trip[]        @relation("Trip_FromLocationIdToLocation")
+  trip_Trip_ToLocationIdToLocation                 Trip[]        @relation("Trip_ToLocationIdToLocation")
+  tripRequest_TripRequest_FromLocationIdToLocation TripRequest[] @relation("TripRequest_FromLocationIdToLocation")
+  tripRequest_TripRequest_ToLocationIdToLocation   TripRequest[] @relation("TripRequest_ToLocationIdToLocation")
+}
+
+model Person {
+  id                                       Int                 @id @default(autoincrement())
+  name                                     String
+  code                                     String?
+  trip_Trip_CreatedByToPerson              Trip[]              @relation("Trip_CreatedByToPerson")
+  trip_Trip_ModifiedByToPerson             Trip[]              @relation("Trip_ModifiedByToPerson")
+  tripRequestPerson                        TripRequestPerson[]
+  tripTicket_TripTicket_CreatedByToPerson  TripTicket[]        @relation("TripTicket_CreatedByToPerson")
+  tripTicket_TripTicket_ModifiedByToPerson TripTicket[]        @relation("TripTicket_ModifiedByToPerson")
+  tripTicket_TripTicket_PersonIdToPerson   TripTicket[]        @relation("TripTicket_PersonIdToPerson")
+}
+
+model Status {
+  id                  Int           @id @default(autoincrement())
+  belongsToEntityType String?
+  name                String
+  isActive            Boolean
+  trip                Trip[]
+  tripRequest         TripRequest[]
+  tripTicket          TripTicket[]
+}
+
+model Trip {
+  id                                     Int         @id @default(autoincrement())
+  fromLocationId                         Int
+  toLocationId                           Int
+  departure                              DateTime    @db.Timestamp(6)
+  arrival                                DateTime    @db.Timestamp(6)
+  peopleCapacity                         Int         @default(0)
+  cargoCapacity                          Int         @default(0)
+  tripRequestId                          Int
+  statusId                               Int?
+  peopleCount                            Int         @default(0)
+  cargoWeight                            Float       @default(0)
+  cargoVolume                            Float       @default(0)
+  createdBy                              Int?
+  createdAt                              DateTime?   @db.Timestamp(6)
+  modifiedBy                             Int?
+  modifiedAt                             DateTime?   @db.Timestamp(6)
+  person_Trip_CreatedByToPerson          Person?     @relation("Trip_CreatedByToPerson", fields: [createdBy], references: [id], onDelete: NoAction, onUpdate: NoAction)
+  location_Trip_FromLocationIdToLocation Location    @relation("Trip_FromLocationIdToLocation", fields: [fromLocationId], references: [id], onDelete: NoAction, onUpdate: NoAction)
+  person_Trip_ModifiedByToPerson         Person?     @relation("Trip_ModifiedByToPerson", fields: [modifiedBy], references: [id], onDelete: NoAction, onUpdate: NoAction)
+  status                                 Status?     @relation(fields: [statusId], references: [id], onDelete: NoAction, onUpdate: NoAction)
+  location_Trip_ToLocationIdToLocation   Location    @relation("Trip_ToLocationIdToLocation", fields: [toLocationId], references: [id], onDelete: NoAction, onUpdate: NoAction)
+  tripRequest                            TripRequest @relation(fields: [tripRequestId], references: [id], onDelete: NoAction, onUpdate: NoAction)
+
+  @@index([tripRequestId], map: "fki_FK_Trip_TripRequestId_TripRequest_Id")
+}
+
+model TripRequest {
+  id                                            Int                 @id @default(autoincrement())
+  fromLocationId                                Int
+  toLocationId                                  Int
+  departEarliest                                DateTime?           @db.Timestamp(6)
+  departLatest                                  DateTime?           @db.Timestamp(6)
+  arriveEarliest                                DateTime?           @db.Timestamp(6)
+  arriveLatest                                  DateTime?           @db.Timestamp(6)
+  createdBy                                     Int?
+  createdAt                                     DateTime?           @db.Timestamp(6)
+  modifiedBy                                    Int?
+  modifiedAt                                    DateTime?           @db.Timestamp(6)
+  statusId                                      Int?
+  remarks                                       String?
+  trip                                          Trip[]
+  location_TripRequest_FromLocationIdToLocation Location            @relation("TripRequest_FromLocationIdToLocation", fields: [fromLocationId], references: [id], onDelete: NoAction, onUpdate: NoAction)
+  status                                        Status?             @relation(fields: [statusId], references: [id], onDelete: NoAction, onUpdate: NoAction)
+  location_TripRequest_ToLocationIdToLocation   Location            @relation("TripRequest_ToLocationIdToLocation", fields: [toLocationId], references: [id], onDelete: NoAction, onUpdate: NoAction)
+  tripRequestCargo                              TripRequestCargo[]
+  tripRequestPerson                             TripRequestPerson[]
+}
+
+model TripRequestCargo {
+  tripRequestId Int
+  cargoId       Int
+  id            Int         @id @default(autoincrement())
+  cargo         Cargo       @relation(fields: [cargoId], references: [id], onDelete: NoAction, onUpdate: NoAction)
+  tripRequest   TripRequest @relation(fields: [tripRequestId], references: [id], onDelete: NoAction, onUpdate: NoAction)
+}
+
+model TripRequestPerson {
+  tripRequestId Int
+  personId      Int
+  id            Int         @id @default(autoincrement())
+  person        Person      @relation(fields: [personId], references: [id], onDelete: NoAction, onUpdate: NoAction)
+  tripRequest   TripRequest @relation(fields: [tripRequestId], references: [id], onDelete: NoAction, onUpdate: NoAction)
+}
+
+model TripTicket {
+  id                                   Int       @id @default(autoincrement())
+  personId                             Int?
+  cargoId                              Int?
+  dependentTripId                      Int?
+  tripRequestId                        Int?
+  statusId                             Int?
+  createdBy                            Int?
+  createdAt                            DateTime? @db.Timestamp(6)
+  modifiedBy                           Int?
+  modifiedAt                           DateTime? @db.Timestamp(6)
+  cargo                                Cargo?    @relation(fields: [cargoId], references: [id], onDelete: NoAction, onUpdate: NoAction)
+  person_TripTicket_CreatedByToPerson  Person?   @relation("TripTicket_CreatedByToPerson", fields: [createdBy], references: [id], onDelete: NoAction, onUpdate: NoAction)
+  person_TripTicket_ModifiedByToPerson Person?   @relation("TripTicket_ModifiedByToPerson", fields: [modifiedBy], references: [id], onDelete: NoAction, onUpdate: NoAction)
+  person_TripTicket_PersonIdToPerson   Person?   @relation("TripTicket_PersonIdToPerson", fields: [personId], references: [id], onDelete: NoAction, onUpdate: NoAction)
+  status                               Status?   @relation(fields: [statusId], references: [id], onDelete: NoAction, onUpdate: NoAction)
 }
