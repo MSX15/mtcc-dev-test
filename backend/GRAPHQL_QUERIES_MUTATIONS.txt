@@ -1,0 +1,457 @@
+query Locations
+{ 
+	locations{
+    id
+    name
+
+  }
+}
+
+query Location($locationId:Int!){
+  location(id: $locationId)
+  {
+    id
+    name
+    coordinateX
+    coordinateY
+    addressDetails
+    isDeleted
+  }
+}
+
+	# {
+	# locations{
+	# id
+	# name
+	# }
+	# }
+
+
+  ###############################################################################
+
+mutation CreatePerson($createPersonInput:CreatePersonInput!)
+{
+  createPerson(createPersonInput: $createPersonInput)
+  {
+    id
+    name
+    code
+  }
+}
+
+
+mutation UpdatePerson($updatePersonInput:UpdatePersonInput!)
+{
+  updatePerson(updatePersonInput: $updatePersonInput)
+  {
+    id
+    name
+    code
+  }
+}
+
+
+{
+  "createPersonInput": { "name": "Bobby Fischer", "code": null },
+  "updatePersonInput": { "id": 1, "name": "Magnus Carlsen", "code": "MAG-54"}
+}
+
+  ###############################################################################
+  mutation CreateTripRequest($createTripRequestInput:CreateTripRequestInput!)
+{
+  createTripRequest(createTripRequestInput: $createTripRequestInput)
+  {
+    id
+		fromLocationId,
+    toLocationId,
+    departEarliest,
+    remarks,
+    statusId,
+
+  }
+}
+
+
+mutation UpdateTripRequest($updateTripRequestInput:UpdateTripRequestInput!)
+{
+  updateTripRequest(updateTripRequestInput: $updateTripRequestInput)
+  {
+    id,
+		fromLocationId,
+    fromLocation{
+      name
+    },
+    toLocationId,
+    toLocation{
+      name
+    },
+    createdById,
+    createdBy{
+      name
+    }
+    createdAt,
+    modifiedById,
+    modifiedBy{
+      name
+    }
+    modifiedAt,
+    cargoList{
+      id,
+      description
+    },
+    remarks,
+    statusId,
+    status{
+      name
+    }
+  }
+}
+
+mutation UpdateTripStatus($updateTripRequesStatustInput:UpdateStatusOfEntityInput!)
+{
+  updateTripRequestStatus(updateStatusOfEntityInput: $updateTripRequesStatustInput)
+  {
+    id,
+		fromLocationId,
+    fromLocation{
+      name
+    },
+    toLocationId,
+    toLocation{
+      name
+    },
+    createdById,
+    createdBy{
+      name
+    }
+    createdAt,
+    modifiedById,
+    modifiedBy{
+      name
+    }
+    modifiedAt,
+    cargoList{
+      id,
+      description
+    },
+    statusId,
+    status{
+      name
+    }
+  }
+}
+  
+  
+{
+  "createTripRequestInput": { "fromLocationId": 1, "toLocationId": 2, "departEarliest": "2023-04-06T20:03:48.530", "remarks": "$TEST" },
+  "updateTripRequestInput": { "id": 1, "toLocationId": 4, "cargoListIds": [1, 2, 3], "remarks": "WHEW" },
+  "updateTripRequesStatustInput": { "entityId": 1, "entityStatusId": 2}
+}
+  ###############################################################################
+
+query TripRequests
+{ 
+	tripRequests{
+    id,
+    departEarliest
+  }
+}
+
+query TripRequest($tripRequestId:Int!){
+  tripRequest(id: $tripRequestId)
+  {
+    id,
+    fromLocationId,
+    fromLocation{
+      name
+    }
+    toLocationId,
+    toLocation{
+      name
+    }
+    createdById,
+    createdAt,
+    modifiedById,
+    modifiedAt,
+    status{
+      name
+    }
+  }
+}
+
+  
+  
+  ###############################################################################
+  mutation CreateTrip($createTripInput:CreateTripInput!)
+{
+  createTrip(createTripInput: $createTripInput)
+  {
+    id
+		fromLocationId,
+    toLocationId,
+    statusId,
+
+  }
+}
+
+
+mutation UpdateTrip($updateTripInput:UpdateTripInput!)
+{
+  updateTrip(updateTripInput: $updateTripInput)
+  {
+    id,
+		fromLocationId,
+    fromLocation{
+      name
+    },
+    toLocationId,
+    toLocation{
+      name
+    },
+    createdById,
+    createdBy{
+      name
+    }
+    createdAt,
+    modifiedById,
+    modifiedBy{
+      name
+    }
+    modifiedAt,
+    statusId,
+    status{
+      name
+    }
+    peopleCount,
+    peopleCapacity,
+    cargoWeight,
+    cargoWeightCapacity,
+    cargoVolume,
+    cargoVolumeCapacity
+  }
+}
+
+mutation UpdateTripStatus($updateTripRequesStatustInput:UpdateStatusOfEntityInput!)
+{
+  updateTripStatus(updateStatusOfEntityInput: $updateTripRequesStatustInput)
+  {
+    id,
+		fromLocationId,
+    fromLocation{
+      name
+    },
+    toLocationId,
+    toLocation{
+      name
+    },
+    createdById,
+    createdBy{
+      name
+    }
+    createdAt,
+    modifiedById,
+    modifiedBy{
+      name
+    }
+    modifiedAt,
+    statusId,
+    status{
+      name
+    }
+  }
+}
+
+{
+  "createTripInput": { "fromLocationId": 1, "toLocationId": 2, "departure": "2023-04-06T20:03:48.530", "arrival": "2023-04-07T20:03:48.530" },
+  "updateTripInput": { "id": 1, "fromLocationId": 2, "toLocationId": 4, "peopleCapacity": 20, "tripRequestId": 1, "cargoWeightCapacity": 1000, "cargoVolumeCapacity": 100000},
+  "updateTripRequesStatustInput": { "entityId": 1, "entityStatusId": 1}
+}
+  
+  
+  
+  ###############################################################################
+
+
+
+mutation CreateTripTicket($createTripTicketInput:CreateTripTicketInput!)
+{
+  createTripTicket(createTripTicketInput: $createTripTicketInput)
+  {
+    id,
+    tripId
+    statusId,
+  }
+}
+  
+{
+  "createTripTicketInput": { "tripId": 1, "cargoId": 1 }
+}
+  
+  
+  
+  
+  ###############################################################################
+
+
+query TripTickets
+{ 
+	tripTickets{
+    id,
+    person{
+      name
+    }
+    cargo{
+      description
+      cargoWeight
+      cargoDimensions
+      cargoDimensionCategory{
+        unitsOfSpace
+      }
+    }
+  }
+}
+
+query TripTicket($tripTicketId:Int!){
+  tripTicket(id: $tripTicketId)
+  {
+    id,
+
+    createdById,
+    createdAt,
+    modifiedById,
+    modifiedAt,
+    status{
+      name
+    }
+  }
+}
+
+
+{
+  "tripRequestId": 1
+}
+  
+  
+  ###############################################################################
+
+  query Trips
+{ 
+	trips{
+    id,
+    tripRequest{
+      id,
+      createdBy{
+        name
+      }
+    }
+    tripTickets{
+      person{
+        name
+      }
+      cargo{
+        cargoWeight
+      }
+    }
+    status{
+      id,
+      name
+    }
+    createdAt,
+    createdBy{
+      id,
+      name,
+    }
+    modifiedAt,
+    modifiedBy{
+      id,
+      name
+    }
+  }
+}
+
+query TripsFiltered($tripFilter:TripFilter!)
+{ 
+	tripsFiltered(filter: $tripFilter){
+    id,
+    tripRequest{
+      id,
+      createdBy{
+        name
+      }
+    }
+    tripTickets{
+      person{
+        name
+      }
+      cargo{
+        cargoWeight
+      }
+    }
+    status{
+      id,
+      name
+    }
+    createdAt,
+    createdBy{
+      id,
+      name,
+    }
+    modifiedAt,
+    modifiedBy{
+      id,
+      name
+    }
+  }
+}
+
+query Trip($tripId:Int!){
+  trip(id: $tripId){
+    id,
+    tripRequest{
+      id,
+      createdBy{
+        name
+      }
+    }
+    tripTickets{
+      person{
+        name
+      }
+      cargo{
+        description
+        cargoWeight
+        cargoDimensionCategory{
+          name
+          unitsOfSpace
+        }
+      }
+    }
+    status{
+      id,
+      name
+    }
+    createdAt,
+    createdBy{
+      id,
+      name,
+    }
+    modifiedAt,
+    modifiedBy{
+      id,
+      name
+    }
+  }
+}
+
+{
+  "tripId": 1,
+  "tripFilter": { "startDate": "2023-04-06T20:03:48.530", "endDate": null }
+}
+  
+  
+  ###############################################################################
+
+
+
+  
+  

@@ -69,6 +69,53 @@ A date-time string at UTC, such as 2019-12-03T09:54:33Z, compliant with the date
 """
 scalar DateTime
 
+type TripTicket {
+  id: Int!
+  tripId: Int!
+  trip: Trip!
+  personId: Int
+  person: Person
+  cargoId: Int
+  cargo: Cargo
+  tripRequestId: Int
+  tripRequest: TripRequest!
+  statusId: Int
+  status: Status
+  createdById: Int
+  createdBy: Person
+  createdAt: DateTime
+  modifiedById: Int
+  modifiedBy: Person
+  modifiedAt: DateTime
+}
+
+type Trip {
+  id: Int!
+  fromLocationId: Int!
+  toLocationId: Int!
+  departure: DateTime!
+  arrival: DateTime!
+  peopleCapacity: Int!
+  cargoVolumeCapacity: Int!
+  cargoWeightCapacity: Int!
+  tripRequestId: Int!
+  peopleCount: Int!
+  cargoWeight: Int!
+  cargoVolume: Int!
+  statusId: Int
+  createdById: Int
+  createdAt: DateTime
+  modifiedById: Int
+  modifiedAt: DateTime
+  createdBy: Person!
+  fromLocation: Location!
+  modifiedBy: Person!
+  status: Status!
+  toLocation: Location!
+  tripRequest: TripRequest
+  tripTickets: [TripTicket!]
+}
+
 type Query {
   helloWorld: String!
   tickets: [String!]!
@@ -83,6 +130,16 @@ type Query {
   tripRequest(id: Int!): TripRequest!
   statuses: [Status!]!
   status(id: Int!): Status!
+  trips: [Trip!]!
+  tripsFiltered(filter: TripFilter!): [Trip!]!
+  trip(id: Int!): Trip!
+  tripTickets: [TripTicket!]!
+  tripTicket(id: Int!): TripTicket!
+}
+
+input TripFilter {
+  startDate: DateTime
+  endDate: DateTime
 }
 
 type Mutation {
@@ -103,6 +160,12 @@ type Mutation {
   createStatus(createStatusInput: CreateStatusInput!): Status!
   updateStatus(updateStatusInput: UpdateStatusInput!): Status!
   removeStatus(id: Int!): Status!
+  createTrip(createTripInput: CreateTripInput!): Trip!
+  updateTrip(updateTripInput: UpdateTripInput!): Trip!
+  updateTripStatus(updateStatusOfEntityInput: UpdateStatusOfEntityInput!): Trip!
+  addTicketToTrip(upsertTripTicketstInput: UpsertTripTicketstInput!): Trip!
+  createTripTicket(createTripTicketInput: CreateTripTicketInput!): TripTicket!
+  updateTripTicketStatus(updateTripTickeStatustInput: UpdateStatusOfEntityInput!): TripTicket!
 }
 
 input CreateLocationInput {
@@ -197,4 +260,56 @@ input UpdateStatusInput {
   """Example field (placeholder)"""
   exampleField: Int
   id: Int!
+}
+
+input CreateTripInput {
+  fromLocationId: Int!
+  toLocationId: Int!
+  departure: DateTime!
+  arrival: DateTime!
+  peopleCapacity: Int
+  cargoVolumeCapacity: Int
+  cargoWeightCapacity: Int
+  tripRequestId: Int
+  peopleCount: Int
+  cargoWeight: Int
+  cargoVolume: Int
+}
+
+input UpdateTripInput {
+  fromLocationId: Int
+  toLocationId: Int
+  departure: DateTime
+  arrival: DateTime
+  peopleCapacity: Int
+  cargoVolumeCapacity: Int
+  cargoWeightCapacity: Int
+  tripRequestId: Int
+  peopleCount: Int
+  cargoWeight: Int
+  cargoVolume: Int
+  id: Int!
+  createdById: Int
+  modifiedById: Int
+}
+
+input UpsertTripTicketstInput {
+  tripId: Int!
+  ticketId: Int
+  personId: Int
+  cargoId: Int
+  dependentTripId: Int
+  tripRequestId: Int
+  statusId: Int
+  createdById: Int
+  modifiedById: Int
+}
+
+input CreateTripTicketInput {
+  tripId: Int!
+  personId: Int
+  cargoId: Int
+  dependentTripId: Int
+  tripRequestId: Int
+  statusId: Int
 }

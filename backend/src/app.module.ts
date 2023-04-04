@@ -9,6 +9,8 @@ import { CargoModule } from './cargo/cargo.module';
 import { CargoDimensionCategoryModule } from './cargo-dimension-category/cargo-dimension-category.module';
 import { TripRequestModule } from './trip-request/trip-request.module';
 import { StatusModule } from './status/status.module';
+import { TripModule } from './trip/trip.module';
+import { TripTicketModule } from './trip-ticket/trip-ticket.module';
 
 
 @Module({
@@ -23,6 +25,8 @@ import { StatusModule } from './status/status.module';
     CargoDimensionCategoryModule,
     TripRequestModule,
     StatusModule,
+    TripModule,
+    TripTicketModule,
   ],
   controllers: [],
   providers: [AppService, AppResolver],

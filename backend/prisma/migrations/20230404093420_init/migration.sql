@@ -60,8 +60,9 @@ CREATE TABLE "Trip" (
     "departure" TIMESTAMP(6) NOT NULL,
     "arrival" TIMESTAMP(6) NOT NULL,
     "peopleCapacity" INTEGER NOT NULL DEFAULT 0,
-    "cargoCapacity" INTEGER NOT NULL DEFAULT 0,
-    "tripRequestId" INTEGER NOT NULL,
+    "cargoVolumeCapacity" INTEGER NOT NULL DEFAULT 0,
+    "cargoWeightCapacity" INTEGER NOT NULL DEFAULT 0,
+    "tripRequestId" INTEGER,
     "statusId" INTEGER,
     "peopleCount" INTEGER NOT NULL DEFAULT 0,
     "cargoWeight" DOUBLE PRECISION NOT NULL DEFAULT 0,
@@ -96,6 +97,7 @@ CREATE TABLE "TripRequest" (
 -- CreateTable
 CREATE TABLE "TripTicket" (
     "id" SERIAL NOT NULL,
+    "tripId" INTEGER NOT NULL,
     "personId" INTEGER,
     "cargoId" INTEGER,
     "dependentTripId" INTEGER,
@@ -171,6 +173,9 @@ ALTER TABLE "TripRequest" ADD CONSTRAINT "TripRequest_createdById_fkey" FOREIGN 
 
 -- AddForeignKey
 ALTER TABLE "TripRequest" ADD CONSTRAINT "TripRequest_modifiedById_fkey" FOREIGN KEY ("modifiedById") REFERENCES "Person"("id") ON DELETE NO ACTION ON UPDATE NO ACTION;
+
+-- AddForeignKey
+ALTER TABLE "TripTicket" ADD CONSTRAINT "TripTicket_tripId_fkey" FOREIGN KEY ("tripId") REFERENCES "Trip"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
 
 -- AddForeignKey
 ALTER TABLE "TripTicket" ADD CONSTRAINT "TripTicket_cargoId_fkey" FOREIGN KEY ("cargoId") REFERENCES "Cargo"("id") ON DELETE NO ACTION ON UPDATE NO ACTION;

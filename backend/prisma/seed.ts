@@ -1,4 +1,5 @@
 import { PrismaClient } from '@prisma/client'
+import * as dayjs from 'dayjs'
 const prisma = new PrismaClient()
 async function main() {
 
@@ -15,7 +16,7 @@ async function main() {
     update: {},
     create: {
         id: 2,
-        name: 'Adam Two',
+        name: 'Hawwa Two',
         code: 'M-0002'
   }})
   const person_Ibrahim = await prisma.person.upsert({
@@ -320,32 +321,155 @@ async function main() {
   }})
 
 
+  await prisma.tripRequest.upsert({
+    where: { id: 1 },
+    update: {},
+    create: {
+        id: 1,
+        fromLocationId: 1,
+        toLocationId: 4,
+        arriveLatest: dayjs("2023-04-16T20:03:48.530").toDate(),
+        arriveEarliest: dayjs("2023-04-15T20:03:48.530").toDate(),
+        createdById: 1,
+        modifiedById: 1,
+        createdAt: dayjs("2023-03-05T20:03:48.530").toDate(),
+        modifiedAt: dayjs("2023-03-05T20:03:48.530").toDate(),
+        statusId: 1
+  }})
 
+  await prisma.tripRequest.upsert({
+    where: { id: 2 },
+    update: {},
+    create: {
+        id: 2,
+        fromLocationId: 1,
+        toLocationId: 7,
+        departEarliest: dayjs("2023-04-06T20:03:48.530").toDate(),
+        departLatest: dayjs("2023-04-07T20:03:48.530").toDate(),
+        createdById: 1,
+        modifiedById: 1,
+        createdAt: dayjs("2023-04-05T20:03:48.530").toDate(),
+        modifiedAt: dayjs("2023-04-05T20:03:48.530").toDate(),
+        statusId: 1
+  }})
 
+  await prisma.tripRequest.upsert({
+    where: { id: 3 },
+    update: {},
+    create: {
+        id: 3,
+        fromLocationId: 1,
+        toLocationId: 4,
+        departEarliest: dayjs("2023-03-06T20:03:48.530").toDate(),
+        departLatest: dayjs("2023-03-08T20:03:48.530").toDate(),
+        createdById: 1,
+        modifiedById: 5,
+        createdAt: dayjs("2023-02-05T20:03:48.530").toDate(),
+        modifiedAt: dayjs("2023-02-155T20:03:48.530").toDate(),
+        statusId: 2
+  }})
 
-//   const bob = await prisma.user.upsert({
-//     where: { email: 'bob@prisma.io' },
-//     update: {},
-//     create: {
-//       email: 'bob@prisma.io',
-//       name: 'Bob',
-//       posts: {
-//         create: [
-//           {
-//             title: 'Follow Prisma on Twitter',
-//             content: 'https://twitter.com/prisma',
-//             published: true,
-//           },
-//           {
-//             title: 'Follow Nexus on Twitter',
-//             content: 'https://twitter.com/nexusgql',
-//             published: true,
-//           },
-//         ],
-//       },
-//     },
-//   })
-//   console.log({ alice, bob })
+  await prisma.trip.upsert({
+    where: { id: 1 },
+    update: {},
+    create: {
+        id: 1,
+        fromLocationId: 1,
+        toLocationId: 4,
+        tripRequestId: 3,
+        departure: dayjs("2023-03-07T20:03:48.530").toDate(),
+        arrival: dayjs("2023-03-07T23:03:48.530").toDate(),
+        cargoVolumeCapacity: 100000,
+        cargoWeightCapacity: 2000,
+        peopleCount: 7,
+        cargoWeight:460,
+        cargoVolume: 1234,
+        createdById: 1,
+        modifiedById: 5,
+        createdAt: dayjs("2023-02-05T20:03:48.530").toDate(),
+        modifiedAt: dayjs("2023-02-155T20:03:48.530").toDate(),
+        statusId: 2
+  }})
+
+  await prisma.trip.upsert({
+    where: { id: 2 },
+    update: {},
+    create: {
+        id: 2,
+        fromLocationId: 1,
+        toLocationId: 4,
+        departure: dayjs("2023-04-07T20:03:48.530").toDate(),
+        arrival: dayjs("2023-04-07T20:03:48.530").toDate(),
+        cargoVolumeCapacity: 8000,
+        cargoWeightCapacity: 2000,
+        peopleCount: 4,
+        cargoWeight: 200,
+        cargoVolume: 1234,
+        createdById: 1,
+        modifiedById: 5,
+        createdAt: dayjs("2023-02-05T20:03:48.530").toDate(),
+        modifiedAt: dayjs("2023-02-155T20:03:48.530").toDate(),
+        statusId: 1
+  }})
+
+  await prisma.tripTicket.upsert({
+    where: { id: 1 },
+    update: {},
+    create: {
+        id: 1,
+        tripId: 1,
+        personId:1,
+        cargoId:1,
+        createdById: 1,
+        modifiedById: 5,
+        createdAt: dayjs("2023-02-05T20:03:48.530").toDate(),
+        modifiedAt: dayjs("2023-02-155T20:03:48.530").toDate(),
+        statusId: 2
+  }})
+
+  await prisma.tripTicket.upsert({
+    where: { id: 2 },
+    update: {},
+    create: {
+        id: 2,
+        tripId: 1,
+        personId:2,
+        cargoId: 2,
+        createdById: 1,
+        modifiedById: 5,
+        createdAt: dayjs("2023-02-05T20:03:48.530").toDate(),
+        modifiedAt: dayjs("2023-02-155T20:03:48.530").toDate(),
+        statusId: 2
+  }})
+
+  await prisma.tripTicket.upsert({
+    where: { id: 3 },
+    update: {},
+    create: {
+        id: 3,
+        tripId: 1,
+        cargoId:3,
+        createdById: 1,
+        modifiedById: 5,
+        createdAt: dayjs("2023-02-05T20:03:48.530").toDate(),
+        modifiedAt: dayjs("2023-02-155T20:03:48.530").toDate(),
+        statusId: 2
+  }})
+
+  await prisma.tripTicket.upsert({
+    where: { id: 4 },
+    update: {},
+    create: {
+        id: 4,
+        tripId: 2,
+        personId:5,
+        createdById: 1,
+        modifiedById: 5,
+        createdAt: dayjs("2023-02-05T20:03:48.530").toDate(),
+        modifiedAt: dayjs("2023-02-155T20:03:48.530").toDate(),
+        statusId: 3
+  }})
+
 }
 
 
