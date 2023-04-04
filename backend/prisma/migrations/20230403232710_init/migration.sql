@@ -66,9 +66,9 @@ CREATE TABLE "Trip" (
     "peopleCount" INTEGER NOT NULL DEFAULT 0,
     "cargoWeight" DOUBLE PRECISION NOT NULL DEFAULT 0,
     "cargoVolume" DOUBLE PRECISION NOT NULL DEFAULT 0,
-    "createdBy" INTEGER,
+    "createdById" INTEGER,
     "createdAt" TIMESTAMP(6),
-    "modifiedBy" INTEGER,
+    "modifiedById" INTEGER,
     "modifiedAt" TIMESTAMP(6),
 
     CONSTRAINT "Trip_pkey" PRIMARY KEY ("id")
@@ -83,9 +83,9 @@ CREATE TABLE "TripRequest" (
     "departLatest" TIMESTAMP(6),
     "arriveEarliest" TIMESTAMP(6),
     "arriveLatest" TIMESTAMP(6),
-    "createdBy" INTEGER,
+    "createdById" INTEGER,
     "createdAt" TIMESTAMP(6),
-    "modifiedBy" INTEGER,
+    "modifiedById" INTEGER,
     "modifiedAt" TIMESTAMP(6),
     "statusId" INTEGER,
     "remarks" TEXT,
@@ -101,9 +101,9 @@ CREATE TABLE "TripTicket" (
     "dependentTripId" INTEGER,
     "tripRequestId" INTEGER,
     "statusId" INTEGER,
-    "createdBy" INTEGER,
+    "createdById" INTEGER,
     "createdAt" TIMESTAMP(6),
-    "modifiedBy" INTEGER,
+    "modifiedById" INTEGER,
     "modifiedAt" TIMESTAMP(6),
 
     CONSTRAINT "TripTicket_pkey" PRIMARY KEY ("id")
@@ -140,13 +140,13 @@ CREATE INDEX "_PersonToTripRequest_B_index" ON "_PersonToTripRequest"("B");
 ALTER TABLE "Cargo" ADD CONSTRAINT "Cargo_cargoDimensionCategoryId_fkey" FOREIGN KEY ("cargoDimensionCategoryId") REFERENCES "CargoDimensionCategory"("id") ON DELETE NO ACTION ON UPDATE NO ACTION;
 
 -- AddForeignKey
-ALTER TABLE "Trip" ADD CONSTRAINT "Trip_createdBy_fkey" FOREIGN KEY ("createdBy") REFERENCES "Person"("id") ON DELETE NO ACTION ON UPDATE NO ACTION;
+ALTER TABLE "Trip" ADD CONSTRAINT "Trip_createdById_fkey" FOREIGN KEY ("createdById") REFERENCES "Person"("id") ON DELETE NO ACTION ON UPDATE NO ACTION;
 
 -- AddForeignKey
 ALTER TABLE "Trip" ADD CONSTRAINT "Trip_fromLocationId_fkey" FOREIGN KEY ("fromLocationId") REFERENCES "Location"("id") ON DELETE NO ACTION ON UPDATE NO ACTION;
 
 -- AddForeignKey
-ALTER TABLE "Trip" ADD CONSTRAINT "Trip_modifiedBy_fkey" FOREIGN KEY ("modifiedBy") REFERENCES "Person"("id") ON DELETE NO ACTION ON UPDATE NO ACTION;
+ALTER TABLE "Trip" ADD CONSTRAINT "Trip_modifiedById_fkey" FOREIGN KEY ("modifiedById") REFERENCES "Person"("id") ON DELETE NO ACTION ON UPDATE NO ACTION;
 
 -- AddForeignKey
 ALTER TABLE "Trip" ADD CONSTRAINT "Trip_statusId_fkey" FOREIGN KEY ("statusId") REFERENCES "Status"("id") ON DELETE NO ACTION ON UPDATE NO ACTION;
@@ -167,13 +167,19 @@ ALTER TABLE "TripRequest" ADD CONSTRAINT "TripRequest_statusId_fkey" FOREIGN KEY
 ALTER TABLE "TripRequest" ADD CONSTRAINT "TripRequest_toLocationId_fkey" FOREIGN KEY ("toLocationId") REFERENCES "Location"("id") ON DELETE NO ACTION ON UPDATE NO ACTION;
 
 -- AddForeignKey
+ALTER TABLE "TripRequest" ADD CONSTRAINT "TripRequest_createdById_fkey" FOREIGN KEY ("createdById") REFERENCES "Person"("id") ON DELETE NO ACTION ON UPDATE NO ACTION;
+
+-- AddForeignKey
+ALTER TABLE "TripRequest" ADD CONSTRAINT "TripRequest_modifiedById_fkey" FOREIGN KEY ("modifiedById") REFERENCES "Person"("id") ON DELETE NO ACTION ON UPDATE NO ACTION;
+
+-- AddForeignKey
 ALTER TABLE "TripTicket" ADD CONSTRAINT "TripTicket_cargoId_fkey" FOREIGN KEY ("cargoId") REFERENCES "Cargo"("id") ON DELETE NO ACTION ON UPDATE NO ACTION;
 
 -- AddForeignKey
-ALTER TABLE "TripTicket" ADD CONSTRAINT "TripTicket_createdBy_fkey" FOREIGN KEY ("createdBy") REFERENCES "Person"("id") ON DELETE NO ACTION ON UPDATE NO ACTION;
+ALTER TABLE "TripTicket" ADD CONSTRAINT "TripTicket_createdById_fkey" FOREIGN KEY ("createdById") REFERENCES "Person"("id") ON DELETE NO ACTION ON UPDATE NO ACTION;
 
 -- AddForeignKey
-ALTER TABLE "TripTicket" ADD CONSTRAINT "TripTicket_modifiedBy_fkey" FOREIGN KEY ("modifiedBy") REFERENCES "Person"("id") ON DELETE NO ACTION ON UPDATE NO ACTION;
+ALTER TABLE "TripTicket" ADD CONSTRAINT "TripTicket_modifiedById_fkey" FOREIGN KEY ("modifiedById") REFERENCES "Person"("id") ON DELETE NO ACTION ON UPDATE NO ACTION;
 
 -- AddForeignKey
 ALTER TABLE "TripTicket" ADD CONSTRAINT "TripTicket_personId_fkey" FOREIGN KEY ("personId") REFERENCES "Person"("id") ON DELETE NO ACTION ON UPDATE NO ACTION;

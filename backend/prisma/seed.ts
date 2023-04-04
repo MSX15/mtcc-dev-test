@@ -244,6 +244,85 @@ async function main() {
         name: 'Rejected',
         isActive: false
   }})
+
+
+
+
+  await prisma.location.upsert({
+    where: { id: 1 },
+    update: {},
+    create: {
+        id: 1,
+        name: 'Male City',
+        coordinateX: 4.17521,
+        coordinateY: 73.50916,
+        isDeleted: false
+  }})
+  await prisma.location.upsert({
+    where: { id: 2 },
+    update: {},
+    create: {
+        id: 2,
+        name: 'Hulhumale',
+        coordinateX: 4.2167,
+        coordinateY: 73.5333,
+        isDeleted: false
+  }})
+  await prisma.location.upsert({
+    where: { id: 3 },
+    update: {},
+    create: {
+        id: 3,
+        name: 'Thinadhoo City',
+        coordinateX: 0.53333,
+        coordinateY: 72.93333,
+        isDeleted: false
+  }})
+  await prisma.location.upsert({
+    where: { id: 4 },
+    update: {},
+    create: {
+        id: 4,
+        name: 'Fuvahmulah City',
+        coordinateX: -0.29878,
+        coordinateY: 73.42403,
+        isDeleted: false
+  }})
+  await prisma.location.upsert({
+    where: { id: 5 },
+    update: {},
+    create: {
+        id: 5,
+        name: 'MTCC Head Office',
+        coordinateX: 4.178184039347687,
+        coordinateY: 73.51541393356229,
+        isDeleted: false
+  }})
+  await prisma.location.upsert({
+    where: { id: 6 },
+    update: {},
+    create: {
+        id: 6,
+        name: 'Hulhumale Central Park',
+        coordinateX: 4.216829692790098,
+        coordinateY: 73.54028378428993,
+        isDeleted: false
+  }})
+  await prisma.location.upsert({
+    where: { id: 7 },
+    update: {},
+    create: {
+        id: 7,
+        name: 'Mt Phase 2',
+        coordinateX: 4.240669176561842,
+        coordinateY: 73.54505429579758,
+        isDeleted: false
+  }})
+
+
+
+
+
 //   const bob = await prisma.user.upsert({
 //     where: { email: 'bob@prisma.io' },
 //     update: {},

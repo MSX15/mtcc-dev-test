@@ -7,6 +7,8 @@ import { LocationModule } from './location/location.module';
 import { PersonModule } from './person/person.module';
 import { CargoModule } from './cargo/cargo.module';
 import { CargoDimensionCategoryModule } from './cargo-dimension-category/cargo-dimension-category.module';
+import { TripRequestModule } from './trip-request/trip-request.module';
+import { StatusModule } from './status/status.module';
 
 
 @Module({
@@ -19,6 +21,8 @@ import { CargoDimensionCategoryModule } from './cargo-dimension-category/cargo-d
     PersonModule,
     CargoModule,
     CargoDimensionCategoryModule,
+    TripRequestModule,
+    StatusModule,
   ],
   controllers: [],
   providers: [AppService, AppResolver],

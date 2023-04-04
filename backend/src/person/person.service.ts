@@ -16,7 +16,7 @@ export class PersonService {
   }
 
   findAll() {
-    return this.prisma.person.findMany();
+    return this.prisma.person.findMany({});
   }
 
   findOne(id: number) {
